@@ -1,3 +1,6 @@
 /myenv
 /savegame.sav
 /__pycache__
+tests/test_unittests.py
+tests/__pycache__/test_unittests.cpython-310-pytest-7.4.0.pyc
+tests/__pycache__/test_unittests.cpython-310.pyc
