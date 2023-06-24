@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 import lzma
 import pickle
 
-from tcod.console import Console
+import tcod.console
 from tcod.map import compute_fov
 
 from message_log import MessageLog

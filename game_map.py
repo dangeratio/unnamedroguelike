@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Iterable, Iterator, Optional
 
-from tcod.console import Console
+import tcod.console
 import numpy as np
 
 from entity import Actor, Item
