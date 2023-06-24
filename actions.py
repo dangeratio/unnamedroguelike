@@ -22,11 +22,8 @@ class Action:
 
     def perform(self) -> None:
         """Perform this action with the objects needed to determine its scope.
-
         `self.engine` is the scope this action is being performed in.
-
         `self.entity` is the object performing the action.
-
         This method must be overridden by Action subclasses.
         """
         raise NotImplementedError()
@@ -59,6 +56,8 @@ class PickupAction(Action):
 
 
 class ItemAction(Action):
+    """Invoke the items ability, this action will be given to provide context."""
+
     def __init__(self, entity: Actor, item: Item, target_xy: Optional[Tuple[int, int]] = None):
         super().__init__(entity)
         self.item = item
@@ -79,7 +78,8 @@ class ItemAction(Action):
 
 class DropItem(ItemAction):
     def perform(self) -> None:
-        if self.entity.equipment.item_is_equipped(self.item):
+        item_is_equipped = self.entity.equipment.item_is_equipped(self.item)
+        if item_is_equipped:
             self.entity.equipment.toggle_equip(self.item)
 
         self.entity.inventory.drop(self.item)
@@ -88,7 +88,6 @@ class DropItem(ItemAction):
 class EquipAction(Action):
     def __init__(self, entity: Actor, item: Item):
         super().__init__(entity)
-
         self.item = item
 
     def perform(self) -> None:
@@ -97,6 +96,7 @@ class EquipAction(Action):
 
 class WaitAction(Action):
     def perform(self) -> None:
+        # Do nothing for a turn
         pass
 
 
@@ -153,10 +153,14 @@ class MeleeAction(ActionWithDirection):
             attack_color = color.enemy_atk
 
         if damage > 0:
-            self.engine.message_log.add_message(f"{attack_desc} for {damage} hit points.", attack_color)
+            self.engine.message_log.add_message(
+                f"{attack_desc} for {damage} hit points.", attack_color
+            )
             target.fighter.hp -= damage
         else:
-            self.engine.message_log.add_message(f"{attack_desc} but does no damage.", attack_color)
+            self.engine.message_log.add_message(
+                f"{attack_desc} but does no damage.", attack_color
+            )
 
 
 class MovementAction(ActionWithDirection):

@@ -27,6 +27,7 @@ orc = Actor(
     inventory=Inventory(capacity=0),
     level=Level(xp_given=35),
 )
+
 troll = Actor(
     char="T",
     color=(0, 127, 0),
@@ -44,18 +45,21 @@ confusion_scroll = Item(
     name="Confusion Scroll",
     consumable=consumable.ConfusionConsumable(number_of_turns=10),
 )
+
 fireball_scroll = Item(
     char="~",
     color=(255, 0, 0),
     name="Fireball Scroll",
     consumable=consumable.FireballDamageConsumable(damage=12, radius=3),
 )
+
 health_potion = Item(
     char="!",
     color=(127, 0, 255),
     name="Health Potion",
     consumable=consumable.HealingConsumable(amount=4),
 )
+
 lightning_scroll = Item(
     char="~",
     color=(255, 255, 0),
