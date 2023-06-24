@@ -12,6 +12,17 @@ if TYPE_CHECKING:
     from engine import Engine
     from entity import Entity
 
+# class WorldMap:
+#     def __init__(self) -> None:
+#         self._world = {}
+    
+#     @property
+#     def world(self) -> WorldMap:
+#         return self
+    
+#     @property
+#     def settlements(self) -> Iterable[Settlements]:
+#         pass
 
 class GameMap:
     def __init__(self, engine: Engine, width: int, height: int, entities: Iterable[Entity] = ()):

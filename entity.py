@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Optional, Tuple, Type, TypeVar, Union
 import copy
 import math
+from game_map import GameMap
 
 from render_order import RenderOrder
 
@@ -84,6 +85,11 @@ class Entity:
         self.x += dx
         self.y += dy
 
+
+class Settlement():
+    def __init__(self) -> None:
+        raise NotImplementedError()
+        
 
 class Actor(Entity):
     def __init__(
