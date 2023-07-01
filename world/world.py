@@ -2,8 +2,16 @@ import random
 import math
 import numpy as np
 import biomes
-from noise import pnoise2
+from opensimplex import OpenSimplex
+# from noise import pnoise2
 
+def debug_print(message):
+    # notimplemented
+    # print(message)
+    pass
+
+def error_print(message):
+    print(message)
 
 class World:
     def __init__(self, size='medium'):
@@ -25,72 +33,64 @@ class World:
     def generate(self):
         try:
             # debug
-            print("Generating world with seed: {}".format(self.seed))
+            debug_print("Generating world with seed: {}".format(self.seed))
             # Create a variable to store the world map
             world_map = np.zeros((self.size, self.size), dtype=int)
             
-            # Parameters for the Perlin noise
+            # Parameters for the noise
             scale = 0.1
-            octaves = 6
-            persistence = 0.5
-            lacunarity = 2.0
+            seed = self.seed
             
-            # Generate the world map using Perlin noise
+            # Initialize the OpenSimplex noise generator
+            noise_generator = OpenSimplex(seed=seed)
+            
+            # Generate the world map using OpenSimplex noise
             for x in range(self.size):
                 for y in range(self.size):
                     # debug
-                    print("Generating biome for x: {}, y: {}".format(x, y))
-                    try:
-                        noise = pnoise2(x * scale,
-                                        y * scale,
-                                        octaves=octaves,
-                                        persistence=persistence,
-                                        lacunarity=lacunarity,
-                                        repeatx=self.size,
-                                        repeaty=self.size,
-                                        base=self.seed)
-                        
-                        # Select the biome based on the noise value
-                        if noise < -0.2:
-                            # e.g. Industrial Wasteland
-                            world_map[x, y] = 2
-                        elif noise < 0.2:
-                            # e.g. Neon City
-                            world_map[x, y] = 0
-                        else:
-                            # e.g. Hacker's Hideout
-                            world_map[x, y] = 1
+                    debug_print("Generating biome for x: {}, y: {}".format(x, y))
                     
-                    except Exception as e:
-                        # print the error message
-                        print(f"An error occurred while generating noise at position ({x}, {y}): {e}")
-            
-            # debug
-            print("Setting self.map to world_map")
+                    # Generate noise using 2D noise
+                    noise = noise_generator.noise2(x * scale, y * scale)
+                    
+                    # Select the biome based on the noise value
+                    if noise < -0.2:
+                        # e.g. Industrial Wasteland
+                        world_map[x, y] = 2
+                    elif noise < 0.2:
+                        # e.g. Neon City
+                        world_map[x, y] = 0
+                    else:
+                        # e.g. Hacker's Hideout
+                        world_map[x, y] = 1
+                
             # Set the world map to the world object
             self.map = world_map
 
             # debug
-            print("World generated successfully")
+            debug_print("World generated successfully")
         
         except Exception as e:
-            # print the error message
-            print("Error generating world: {}".format(e))
-
-        # Return the world object
+            error_print(f"An error occurred during generation: {e}")
+        
         return self
 
+
     def display_world(self):
-        # debug 
-        print("Displaying world map")
-        # Prints a grid of biomes in the world
-        for x in range(self.size):
-            for y in range(self.size):
-                biome_id = self.map[x, y]
-                # Assuming a print_symbol in the Biome object to represent the biome
-                print_symbol = self.biomes[biome_id]["tile_ascii"][0]
-                print(print_symbol, end=' ')
-            print() # new line for next row
+        
+        # Check if map attribute exists
+        if hasattr(self, 'map'):
+            # Prints a grid of biomes in the world
+            for x in range(self.size):  # Corrected here
+                for y in range(self.size):  # Corrected here
+                    biome_id = self.map[x, y]
+                    print_symbol = self.biomes[biome_id]["tile_ascii"][0]
+                    print(print_symbol, end=' ')
+                print() # new line for next row
+        else:
+            debug_print("World map has not been generated.")
+
+
 
 # Usage example
 world_gen = World(size='small')
